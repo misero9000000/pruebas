@@ -6,8 +6,7 @@ from random import sample
 import matplotlib.pyplot as plt
 
 class KMeans:
-    def __init__(self, X, k, init='random'):
-        
+    def __init__(self, X, k, init='random'):        
         self.X=X
         self.k=k
         if init=='random':            
@@ -17,16 +16,15 @@ class KMeans:
     def fit(self):
         spark = SparkSession.builder.appName("spark_paral").getOrCreate()
         sparkContext= spark.sparkContext
-        Puntos=sparkContext.parallelize(self.X)        
+        #Puntos=sparkContext.parallelize(self.X)        
+        Puntos=spark.createDataFrame(map(lambda x: (int(x[0]), Vectors.dense(x[:])), self.X),['data','features'])        
         self.llave_centroides = Puntos.map(self.diferencia_minima)
         nuevos_centroides=Puntos.map(self.nuevos_centroides)
         #print(self.X,"sdsd")
         #print(np.asarray(Puntos.collect()),"collect")
         #print(llave_centroides.collect(),"collect")
-        return llave_centroides
-
-    def nuevos_centroides(self,x):
-        for centroide in 
+        #return llave_centroides
+    
 
     def getCentroides(self):
         return self.centroides
@@ -52,7 +50,7 @@ def main():
 
 
     colorlist=[ '#051b30', '#8bb6de', '#434f08', '#4f1008', '#c8493a', '#e7209b','#050100', '#1e7614', '#76a071', '#745a6a']
-
+    """
     #print(km.getCentroides())
     centroides=np.array(kmm.getCentroides())
     
@@ -62,7 +60,7 @@ def main():
     for x in range(centroides.shape[0]):        
         plt.plot(centroides[x][0],centroides[x][1], marker='o', color='r', ls='')
     plt.show()
-    
+    """
 
 
 if __name__ == "__main__":
