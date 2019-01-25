@@ -17,17 +17,20 @@ class KMeans:
         spark = SparkSession.builder.appName("spark_paral").getOrCreate()
         sparkContext= spark.sparkContext
         Puntos=sparkContext.parallelize(self.X)        
-        llave_centroides = Puntos.map(self.diferencia_minima)
-        print(self.X,"sdsd")
-        print(np.asarray(Puntos.collect()),"collect")
+        self.llave_centroides = Puntos.map(self.diferencia_minima)
+        nuevos_centroides=Puntos.map(self.nuevos_centroides)
+        #print(self.X,"sdsd")
+        #print(np.asarray(Puntos.collect()),"collect")
         #print(llave_centroides.collect(),"collect")
         return llave_centroides
+
+    def nuevos_centroides(self,x):
+        for centroide in 
 
     def getCentroides(self):
         return self.centroides
 
-    def diferencia_minima(self,x):    
-        
+    def diferencia_minima(self,x):            
         for centroide in range(self.k):            
             if centroide==0:
                 dist_minima=Vectors.squared_distance(x,self.centroides[centroide])
@@ -58,7 +61,8 @@ def main():
     for x in range(centroides.shape[0]):        
         plt.plot(centroides[x][0],centroides[x][1], marker='o', color='r', ls='')
     plt.show()
-    ##
+    
+
 
 if __name__ == "__main__":
     main()
