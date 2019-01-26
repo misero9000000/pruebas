@@ -61,13 +61,7 @@ def main():
         plt.plot(centroides[x][0],centroides[x][1], marker='o', color='r', ls='')
     plt.show()
     """
-    cambio cambio cambio
-     as 
-     ascii
-     abs 
-     s
-
-      sdasd
+    siempre no
 
 if __name__ == "__main__":
     main()
