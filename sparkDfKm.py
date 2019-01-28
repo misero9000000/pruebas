@@ -16,10 +16,24 @@ class KMeans:
     def fit(self):
         spark = SparkSession.builder.appName("spark_paral").getOrCreate()
         sparkContext= spark.sparkContext
-        #Puntos=sparkContext.parallelize(self.X)        
-        Puntos=spark.createDataFrame(map(lambda x: (int(x[0]), Vectors.dense(x[:])), self.X),['data','features'])        
-        self.llave_centroides = Puntos.map(self.diferencia_minima)
-        nuevos_centroides=Puntos.map(self.nuevos_centroides)
+        Puntos=sparkContext.parallelize(self.X)        
+        llaves_centroides=Puntos.map(self.diferencia_minima)
+        nuevos_centroides=llaves_centroides.map(lambda x: self.X[x], llaves_centroides)
+
+        print(type(Puntos))
+        print("ncncncncncncncncncnccn")
+        print (type(llaves_centroides))
+        print("ncncncncncncncncncnccn")
+        print (nuevos_centroides.collect())
+        #Puntos=spark.createDataFrame(map(lambda x: (int(0), Vectors.dense(x[:])), self.X),['data','features'])                
+        #print(Puntos.collect())
+
+        #print(type(Puntos.select("features").foreach(self.diferencia_minima)))
+        
+        #print(Puntos.collect())
+
+        #print(type(llave_centroides))
+        #nuevos_centroides=Puntos.map(self.nuevos_centroides)
         #print(self.X,"sdsd")
         #print(np.asarray(Puntos.collect()),"collect")
         #print(llave_centroides.collect(),"collect")
@@ -37,16 +51,17 @@ class KMeans:
             else:
                 if dist_minima > Vectors.squared_distance(x,self.centroides[centroide]):
                     llave_centroide=centroide
-        return llave_centroide
-        
+        #x[0]=llave_centroide
+        return llave_centroide        
 def main():
     
 
     X=np.random.rand(10,2)*100
     kmm=KMeans(X,3)
-    print(kmm.fit().collect())
-    print("hecho")
-    print(kmm.getCentroides())
+    kmm.fit()
+    #print(kmm.fit().collect())
+    #print("hecho")
+    #print(kmm.getCentroides())
 
 
     colorlist=[ '#051b30', '#8bb6de', '#434f08', '#4f1008', '#c8493a', '#e7209b','#050100', '#1e7614', '#76a071', '#745a6a']
@@ -61,7 +76,7 @@ def main():
         plt.plot(centroides[x][0],centroides[x][1], marker='o', color='r', ls='')
     plt.show()
     """
-    siempre no
+
 
 if __name__ == "__main__":
     main()
